@@ -4,8 +4,9 @@ Desarrollo de un juego clásico de ajedrez habilitado para dos jugadores pero im
 
 ## Integrantes del equipo
 Andres, Romero Souto, andresrosouto 
+Luis Fernando, Rubio Regojo, luisrubio27
+David, Torrero Casas, davidtorrero
 
-[Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
 
 ## Objetivos del trabajo
 
