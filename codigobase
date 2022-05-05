@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
+#include "SerialClass/SerialClass.h"
+#define N 8
+
+enum turno { blanco, negro };
+
+void gotoxy(int x, int y)
+{
+
+    HANDLE hcon;
+    hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD dwPos;
+    dwPos.X = x;
+    dwPos.Y = y;
+    SetConsoleCursorPosition(hcon, dwPos);
+
+
+
+}
+
+char tablero[N][N];
+void imprimir_tablero();
+void inicializar_tablero();
+
+
+int main(void)
+{
+    char turno[N] = "BLANCO";
+    char puerto[6] = "COM4";
+ 
+    Serial* Arduino = new Serial(puerto);
+
+    while (Arduino->IsConnected())
+    {
+
+     
+        printf("Arduino conectado\n");
+        printf("Enviando:%d\n", turno);
+        Arduino->WriteData(
+
+        Sleep(500);
+
+        Arduino->ReadData(turno, sizeof(turno));
+        printf("Recibiendo:%d\n", turno);
+
+       Sleep(1000);
+    }
+
+
+
+    int i = 0;
+    char var[6];
+    inicializar_tablero();
+    imprimir_tablero();
+
+    printf("Vamos a proceder a jugar si desea salir de la partida o rendirse pulse w\n");
+
+
+    while (var[i] != '\n')
+    {
+        scanf_s("%c", var[i]);
+        i++;
+
+    }
+
+
+
+
+}
+
+void inicializar_tablero() {
+    int i, j, k;
+    char primera_fila[] = "tcadract";
+
+    for (j = 0; j < N; j++)
+    {
+        tablero[0][j] = primera_fila[j];
+        tablero[1][j] = 'p';
+
+
+        for (i = 2; i < 6; ++i)
+        {
+            tablero[i][j] = ' ';
+        }
+
+        tablero[6][j] = 'P';
+        tablero[7][j] = toupper(primera_fila[j]);
+    }
+}
+
+void imprimir_tablero()
+{
+    int i, j;
+
+    printf("\n   ");
+    for (j = 0; j < N; j++)
+    {
+        printf("%d ", j);
+
+    }
+    printf("\n");
+    printf("  +---------------+\n");
+
+    for (i = 0; i < N; i++) {
+        printf("%c |", 'a' + i);
+        for (j = 0; j < N; j++)
+        {
+            printf("%c ", tablero[i][j]);
+        }
+        printf("\b|\n");
+
+    }
+    printf("  +---------------+\n");
+}
