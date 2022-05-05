@@ -1,0 +1,56 @@
+#include <stdio.h>
+#define  N 100
+
+struct mov {
+
+	char pieza;
+	char mov[6];
+	char datos_partida[N];
+
+};
+
+
+
+
+void gestor_datos()
+{
+	int i=0;
+	struct mov m;
+	do {
+
+
+		printf("Introduce la pieza usada en el movimiento(En el caso de querer salir pulse w)\n");
+		scanf_s("%c", &m.pieza);
+
+		printf("Introduce un movimiento (ES importante introducir primero la casilla de partida de la pieza y despues la nueva posición Ej. b4 d4\n");
+		getchar();
+		gets_s(m.mov);
+
+
+		getchar();
+			m.datos_partida[i] == m.pieza;
+			m.datos_partida[i + 1] == m.mov[3];
+			m.datos_partida[i + 2] == m.mov[4];
+			m.datos_partida[i + 3] == ' ';
+		
+			i = i + 4;
+	} while (m.pieza != 'w');
+
+
+}
+
+
+int main()
+{
+	struct mov m;
+	int i;
+	gestor_datos();
+
+	for (i = 0; i < N; i++)
+	{
+		printf("%d", m.datos_partida[i]); // Para asegurarnos de que ha impreso correctamente los datos
+
+	}
+
+
+}
