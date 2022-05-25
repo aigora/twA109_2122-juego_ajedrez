@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <conio.h>
+include <stdio.h>
+#include <stdlib.h>
 #include <windows.h>
-#include "SerialClass/SerialClass.h"
-#define N 8
+#define Q 8
+
 
 
 void gotoxy(int x, int y)
@@ -19,112 +19,206 @@ void gotoxy(int x, int y)
 
 }
 
-char tablero[N][N];
-void imprimir_tablero();
-void inicializar_tablero();
+
+struct piezas_negras {
 
 
-int main(void)
+    char Peon;
+    char Rey;
+    char Dama;
+    char Alfil;
+    char Torre;
+    char Caballo;
+
+};
+
+struct piezas_blancas{
+
+
+    char Peon;
+    char Rey;
+    char Dama;
+    char Alfil;
+    char Torre;
+    char Caballo;
+
+};
+
+typedef struct {
+
+
+    int num;
+
+
+
+}descifre;
+
+
+
+void imprimir_tablero(char tab[8][8]);
+int generar_movimiento(char tab[8][8]);
+//void crear_fichero(datos* p);
+
+
+int main()
 {
-    char jugador1[] = "BLANCO";
-    char jugador2[] = "NEGRO";
-    char puerto[6] = "COM4";
-   
-    Serial* Arduino = new Serial(puerto);
-    char salir = 'a';
-    
-   while (Arduino->IsConnected())
-    {
-        
-        
-
-        printf("Arduino conectado\n");
-        printf("Enviando:%s\n", jugador1);
-        Arduino->WriteData(jugador1, sizeof(jugador1));
-        Sleep(500);
-        Arduino->ReadData(jugador1, sizeof(jugador1));
-        printf("Recibiendo:%s\n", jugador1);
-        Sleep(500);
-
-        printf("Cambio de turno\n");
-
-        Arduino->WriteData(jugador2, sizeof(jugador2));
-        printf("Enviando:%s\n", jugador2);
-        Sleep(500);
-        Arduino->ReadData(jugador2, sizeof(jugador2));
-        printf("Recibiendo:%s\n", jugador2);
-        Sleep(500);
-        
-        printf("Cambio de turno\n");
-    }
-    
-    
-
-
-
-
-
-
-
-
-    
-    inicializar_tablero();
-    imprimir_tablero();
-
-    //printf("Vamos a proceder a jugar si desea salir de la partida o rendirse pulse w\n");
-
-
-   
-
-
-
-
-}
-
-void inicializar_tablero() {
+    struct piezas_negras neg = { 'P','R','D','A','T','C' };
+    struct piezas_blancas bln = { 'p','r','d','a','t','c' };
+    struct piezas_negras* N;
+    struct piezas_blancas* B;
+   // datos* p;
+    N = &neg;
+    B = &bln;
+    char otro_movimiento='S';
     int i, j, k;
-    char primera_fila[] = "tcadract";
-    char ultima_fila[] = "TCADRACT";
-    for (j = 0; j < N; j++)
+    int cont = 0;
+
+    char tablero[8][8];
+    char ent_mov[3];
+    char sal_mov[3];
+
+    int camb_ent1, camb_ent2;
+    int camb_sal1, camb_sal2;
+
+    int num_maestro;
+
+
+
+
+    tablero[0][0] = B->Torre;
+    tablero[0][1] = B->Caballo;
+    tablero[0][2] = B->Alfil;
+    tablero[0][3] = B->Rey;
+    tablero[0][4] = B->Dama;
+    tablero[0][5] = B->Alfil;
+    tablero[0][6] = B->Caballo;
+    tablero[0][7] = B->Torre;
+
+    tablero[7][0] = N->Torre;
+    tablero[7][1] = N->Caballo;
+    tablero[7][2] = N->Alfil;
+    tablero[7][3] = N->Rey;
+    tablero[7][4] = N->Dama;
+    tablero[7][5] = N->Alfil;
+    tablero[7][6] = N->Caballo;
+    tablero[7][7] = N->Torre;
+
+
+    for (i = 0; i < Q; i++)
     {
-        tablero[0][j] = primera_fila[j];
-        tablero[1][j] = 'p';
+        tablero[1][i] = B->Peon;
 
-
-        for (i = 2; i < 6; ++i)
+        for (j = 2; j < 6; j++)
         {
-            tablero[i][j] = ' ';
+            tablero[j][i] = ' ';
         }
+        tablero[6][i] = N->Peon;
+    }
 
-        tablero[6][j] = 'P';
-        tablero[7][j] = ultima_fila[j];
+    imprimir_tablero(tablero);
+
+    
+    
+
+
+    for (k = 0; otro_movimiento != 'N'; k++)
+    {
+      num_maestro = generar_movimiento(tablero);
+
+        imprimir_tablero(tablero);
+
+        printf("Desea realizar otro movimiento:S/N?\n");
+        scanf_s("%c", &otro_movimiento);
+
+        cont++;
+
+        
+
+
+
+
     }
 }
+  
 
-void imprimir_tablero()
+
+
+
+
+
+void imprimir_tablero(char tab[8][8])
 {
-    int i, j;
 
-    printf("\n   ");
-    for (j = 0; j < N; j++)
-    {
-        printf("%d ", j);
+    int k,m,l;
 
-    }
-    printf("\n");
-    printf("  +---------------+\n");
-
-    for (i = 0; i < N; i++) {
-        printf("%c |", 'a' + i);
-        for (j = 0; j < N; j++)
+ 
+        printf("\n\n   ");
+        for (k = 0; k < 8; k++)
         {
-            printf("%c ", tablero[i][j]);
+            printf("%d ", k);
+
         }
-        printf("\b|\n");
+        printf("\n");
+        printf("  +---------------+\n");
+
+        for (m = 0; m < 8; m++) {
+            printf("%c |", 'a' + m);
+            for (l = 0; l < 8; l++)
+            {
+                printf("%c ", tab[m][l]);
+            }
+            printf("\b|\n");
+
+        }
+        printf("  +---------------+\n");
+
+
 
     }
-    printf("  +---------------+\n");
-}
+
+
+void generar_movimiento(char tab[8][8])
+{
+   
+    char ent_mov[3];
+    char sal_mov[3];
+    char robo=0;
+    
+    int camb_ent1, camb_ent2;
+    int camb_sal1, camb_sal2;
+    int i;
+   
+    getchar();
+    printf("Introduzca la casilla de la parte la pieza\n");
+    gets_s(ent_mov);
+    
+
+    getchar();
+    printf("Introduzca la casilla donde quiere colocar la pieza\n");
+    gets_s(sal_mov);
+    
+    puts(ent_mov);
+    
+
+    camb_ent1 = ent_mov[0] - 'a';
+    camb_ent2 = ent_mov[1] - '0';
+    camb_sal1 = sal_mov[0] - 'a';
+    camb_sal2 = sal_mov[1] - '0';
+
+   
+
+
+
+    robo = tab[camb_ent1][camb_ent2];
+    tab[camb_ent1][camb_ent2] = ' ';
+    tab[camb_sal1][camb_sal2] = robo;
+
+   }
+
+
+
+   
+
 
 
 
