@@ -1,13 +1,12 @@
 # Juego de Ajedrez
 
-Desarrollo de un juego clásico de ajedrez habilitado para dos jugadores pero implementado vía hardware. 
+Desarrollo de un juego clásico de ajedrez habilitado para dos jugadores con un cronómetro vía hardware. 
 
 ## Integrantes del equipo
 Andres, Romero Souto, andresrosouto 
 
 Luis Fernando, Rubio Regojo, luisrubio27
 
-David, Torrero Casas, davidtorrero
 
 
 ## Objetivos del trabajo
