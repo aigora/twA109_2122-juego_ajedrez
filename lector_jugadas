@@ -1,0 +1,337 @@
+#include <stdio.h>
+
+
+
+
+int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
+{
+	int vector_entrada[3];
+	int vector_salida[3];
+	int res_1;
+	int res_2;
+	char pieza;
+
+
+
+	vector_entrada[0] = ent_mov[0] - 'a';
+	vector_entrada[1] = ent_mov[1] - '0';
+	vector_salida[0] = sal_mov[0] - 'a';
+	vector_salida[1] = sal_mov[1] - '0';
+
+	pieza = tab[vector_entrada[0]][vector_entrada[1]];
+	res_1 = vector_salida[0] - vector_entrada[0];
+	res_2 = vector_salida[1] - vector_entrada[1];
+
+
+
+	switch (pieza)
+	{
+	case ' ': printf("No hay pieza en esta casilla\n"); return 0; break;
+	case 'p':
+		if (vector_entrada[0] == 1 && res_1 == 2 && res_2 == 0)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 &&  res_2 == 0)
+		{
+			return 1;
+		}
+		else {
+			return 0;
+		}
+		break;
+	case 'c':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == 2 &&   res_2 == 1)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 && res_2 == 2)
+		{
+			return 1;
+
+		}
+		else {
+
+			return 0;
+		}
+
+		break;
+	case 'a':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == res_2)
+		{
+			return 1;
+		}
+		else {
+
+			return 0;
+
+		} break;
+
+	case 't':
+	
+		if (res_1 == 0 || res_2 == 0)
+		{
+
+			return 1;
+
+		}
+		else {
+
+			return 0;
+
+		}
+		break;
+	
+	case 'r':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == 0 && res_2 == 1)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 && res_2 == 0)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 && res_2 == 1)
+		{
+
+			return 1;
+		}
+		else {
+
+			return  0;
+		}
+
+	case 'd':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == res_2)
+		{
+			return 1;
+		}
+		else if (res_1 == 0 || res_2 == 0)
+		{
+
+			return 1;
+
+		}
+		else {
+
+			return 0;
+
+		}
+		break;
+
+
+	case 'P':
+		if (vector_entrada[0] == 6 && res_1 == -2 && res_2 == 0)
+		{
+			return 1;
+		}
+		else if (res_1 == -1 && res_2 == 0)
+		{
+			return 1;
+		}
+		else {
+			return 0;
+		}
+		break;
+
+	case 'C':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == 2 && res_2 == 1)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 && res_2 == 2)
+		{
+			return 1;
+
+		}
+		else {
+
+			return 0;
+		}
+
+		break;
+
+	case 'A':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == res_2)
+		{
+			return 1;
+		}
+		else {
+
+			return 0;
+
+		} break;
+	case 'T':
+
+		if (res_1 == 0 || res_2 == 0)
+		{
+
+			return 1;
+
+		}
+		else {
+
+			return 0;
+
+		}
+
+	case 'R':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == 0 && res_2 == 1)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 && res_2 == 0)
+		{
+			return 1;
+		}
+		else if (res_1 == 1 && res_2 == 1)
+		{
+
+			return 1;
+		}
+		else {
+
+			return  0;
+		}
+
+	case 'D':
+		if (res_1 < 0)
+		{
+			res_1 = res_1 * (-1);
+		}
+		if (res_2 < 0)
+		{
+			res_2 = res_2 * (-1);
+		}
+
+		if (res_1 == res_2)
+		{
+			return 1;
+		}
+		else if (res_1 == 0 || res_2 == 0)
+		{ 
+			return 1;
+		}
+		else {
+
+			return 0;
+		}
+		break;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
