@@ -1,0 +1,56 @@
+// C++ code
+//
+#include <Adafruit_LiquidCrystal.h>
+
+int tiempo = 300;
+int minutos;
+int segundos;
+
+Adafruit_LiquidCrystal lcd_1(0);
+
+void setup()
+{
+  lcd_1.begin(16, 2);
+  lcd_1.print("Tiempo");
+
+}
+
+void loop()
+{
+  
+  //CALCULOS DE TIEMPO
+  minutos = (int)tiempo / 60;
+  segundos = (tiempo-(minutos*60));
+  
+  
+ //minutos
+  lcd_1.setCursor(0,1);
+  if(minutos<10)
+  {
+    lcd_1.print("0");
+    lcd_1.setCursor(1,1);
+    lcd_1.print(minutos);
+  }
+  else
+  {
+    lcd_1.print(minutos);
+  }
+  //segundos
+  lcd_1.setCursor(2,1);
+  lcd_1.print(":");
+  if(segundos<10)
+  {
+    lcd_1.print("0");
+    lcd_1.setCursor(4,1);
+    lcd_1.print(segundos);
+  }
+  else
+  {
+    lcd_1.print(segundos);
+  }
+  
+ 
+  delay(1000); //funcion que hace esperar 1 seg
+  tiempo -= 1; //resta 1 seg 
+  
+}
