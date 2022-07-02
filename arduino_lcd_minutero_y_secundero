@@ -1,3 +1,4 @@
+
 #include <LiquidCrystal_I2C.h>
 
 
@@ -32,15 +33,34 @@ int Tiempo_Mov_Jug1=0;
 int Tiempo_Mov_Jug2=0;
 int modo=DETENIDO;
 int tiempoGanador=0;
-int tiempo_1=180;
-int tiempo_2=180;
+int tiempo_1=0;
+int tiempo_2=0;
 int minutos_Jugador1=0;
 int minutos_Jugador2=0;
 int segundos_Jugador1=0;
 int segundos_Jugador2=0;
+int temp;
+
+struct tiempo_partida
+{
 
 
-int temp=0;
+
+
+
+
+
+
+
+  
+};
+
+
+
+
+
+
+
 void setup() {
   // put your setup code h
 
@@ -92,33 +112,46 @@ void loop()
 
 if( Serial.available()> 0) // Si hay datos disponibles en el puerto serie.
      {
+         
         String str = Serial.readStringUntil('\n'); // Lee una cadena hasta \n
         if (str.compareTo("3")==0)
-        {   temp=temp+3;
+        {   temp=3;
           str="0K"; 
+          tiempo_1=60*temp;
+          tiempo_2=60*temp;
+
+          
     
           }
         else  if (str.compareTo("5")==0)
-        {   temp=temp+5;
+        {   temp=5;
           str="0K"; 
+          tiempo_1=60*temp;
+          tiempo_2=60*temp;
     
           }
           else  if (str.compareTo("10")==0)
         { 
-           temp=temp+10;
+           temp=10;
           str="0K"; 
+         tiempo_1=60*temp;
+         tiempo_2=60*temp;
     
         }
           else   if (str.compareTo("20")==0)
         { 
-          temp=temp+20;
+          temp=20;
           str="0K"; 
-    
+          tiempo_1=60*temp;
+          tiempo_2=60*temp;
+         
         }
         else  if (str.compareTo("30")==0)
         { 
-           temp=temp+30;
+           temp=30;
           str="0K"; 
+          tiempo_1=60*temp;
+          tiempo_2=60*temp;
     
         }
         else
@@ -126,14 +159,13 @@ if( Serial.available()> 0) // Si hay datos disponibles en el puerto serie.
           str="ERROR";
           
         }
-        Serial.println(str); // Envía la respuesta a través del puerto serie.
+        Serial.println(str);
+        // Envía la respuesta a través del puerto serie.
      }
 
 
-     tiempo_1=60*temp;
-     tiempo_2=60*temp;
-
-
+    
+   
  
    minutos_Jugador1 = tiempo_1/60;
    minutos_Jugador2 = tiempo_2/60;
@@ -174,14 +206,10 @@ if( Serial.available()> 0) // Si hay datos disponibles en el puerto serie.
     
     //De acuerdo al modo descontamos el tiempo del jugardor
     //correspondiente 
-    if(modo == TURNO_JUGADOR_1){
+    if(modo == TURNO_JUGADOR_1)
+    {
         tiempoDePartida++;
-    // Tiempo_Base_Jug1++;
-     //lcd.setCursor(13,0);
-    // lcd.print(Tiempo_Base_Jug1);
- // Serial.println(Tiempo_Base_Jug2);
-     // Tiempo_Base_Jug2=0;
-     tiempo_1--;  
+         tiempo_1--;  
 
 
 
@@ -326,8 +354,6 @@ if( Serial.available()> 0) // Si hay datos disponibles en el puerto serie.
 
   delay(10); // para alivianar la carga del navegador
 }
-
-
 
 
 
