@@ -77,21 +77,24 @@ int main()
     char otro_movimiento = 'S';
     char pieza;
     int tiempo_minutos_partida = 0;
-    
+    int menu1;
+    int menu2;
     int i, j, k;
-    int cont = 0, contador_malloc = 0;
+    int cont = 0;
+    int jugada_leida;
+    int binario;
+    int clave_salida = 0;
+
 
     char tablero[Q][Q];
     char ent_mov[3];
     char sal_mov[3];
 
-    int camb_ent1, camb_ent2;
-    int camb_sal1, camb_sal2;
-    int clave_salida = 0;
+   
     
-    almacenar alm[P];
+    almacenar alm;
     almacenar* palm;
-    palm = alm;
+    palm = &alm;
    
    
     int longitud = 0, n = 0;
@@ -130,15 +133,15 @@ int main()
     do {
         setlocale(LC_ALL, "ES-es");
 
-        menu_ppal1();
+      menu1= menu_ppal1();
         Sleep(PAUSA_MS);
 
-        switch (menu_ppal1())
+        switch (menu1)
         {
         case 1:
-            menu_ppal2();
+           menu2=menu_ppal2();
             Sleep(PAUSA_MS);
-            switch (menu_ppal2())
+            switch (menu2)
             {
 
             case 1:
@@ -167,37 +170,40 @@ int main()
             Sleep(PAUSA_MS);
 
            alta_usuario(&palm, &n, &longitud);
-
+           fflush(stdin);
            
            do {
 
 
                 do {
+                    
+
                     getchar();
                     printf("Introduzca la casilla de la que parte la pieza\n");
                     gets_s(ent_mov);
 
-                    getchar();
+                    
                     printf("Introduzca la casilla donde desea colocar la pieza\n");
+                    getchar();
                     gets_s(sal_mov);
-                    leer_jugada(tablero, ent_mov, sal_mov);
-
-                    if (leer_jugada(tablero, ent_mov, sal_mov) == 0)
+                  jugada_leida=leer_jugada(tablero, ent_mov, sal_mov);
+                  
+                    if (jugada_leida == 0)
                     {
 
                         printf("No es posible realizar ese movimiento tendrá que volver a introducirlo\n");
 
                     }
+                    
 
-
-                } while (leer_jugada(tablero, ent_mov, sal_mov) == 1);
+                } while (jugada_leida != 1);
 
 
                 pieza = generar_movimiento(tablero, ent_mov, sal_mov);
                 cont++;
 
                 guardar_movimientos(ent_mov, sal_mov, pieza, palm, cont);
-
+                
                 imprimir_tablero(tablero);
 
 
@@ -460,25 +466,21 @@ void imprimir_tablero(char tab[Q][Q])
 
 char generar_movimiento(char tab[Q][Q], char ent_mov[3], char sal_mov[3])
 {
-    char pieza = '0';
+    char pieza;
 
     int camb_ent1, camb_ent2;
     int camb_sal1, camb_sal2;
 
     //Algoritmos para transformar casillas en intercambio de piezas
 
-    camb_ent1 = ent_mov[0] - 'a';
-    camb_ent2 = ent_mov[1] - '0';
-    camb_sal1 = sal_mov[0] - 'a';
-    camb_sal2 = sal_mov[1] - '0';
-
-
+    camb_ent1 =(int) ent_mov[0] - 'a';
+    camb_ent2 =(int) ent_mov[1] - '0';
+    camb_sal1 = (int)sal_mov[0] - 'a';
+    camb_sal2 = (int)sal_mov[1] - '0';
 
     pieza = tab[camb_ent1][camb_ent2];
     tab[camb_ent1][camb_ent2] = ' ';
     tab[camb_sal1][camb_sal2] = pieza;
-
-
 
 
     return pieza;
@@ -504,7 +506,7 @@ void solicitar_tiempos_movimientos(Serial* Arduino,almacenar*alm)
     char mensaje_recibido[MAX_BUFFER];
     int i;
 
-    bytesRecibidos = Enviar_y_Recibir(Arduino, "ENVIAR TIEMPOS", mensaje_recibido);
+    bytesRecibidos = Enviar_y_Recibir(Arduino, "ENVIAR_TIEMPOS", mensaje_recibido);
     if (bytesRecibidos <= 0)
     {
         printf("\nNo se ha recibido respuesta a la petición\n");
@@ -663,37 +665,40 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 {
     int vector_entrada[3];
     int vector_salida[3];
-    int res_1;
-    int res_2;
+    int res_1 = 0;
+    int res_2 = 0;
     char pieza;
+    int binario = 2;
 
 
-
-    vector_entrada[0] = ent_mov[0] - 'a';
-    vector_entrada[1] = ent_mov[1] - '0';
-    vector_salida[0] = sal_mov[0] - 'a';
-    vector_salida[1] = sal_mov[1] - '0';
+    vector_entrada[0] = (int)(ent_mov[0] - 'a');
+    vector_entrada[1] = (int)(ent_mov[1] - '0');
+    vector_salida[0] =(int) (sal_mov[0] - 'a');
+    vector_salida[1] = (int) (sal_mov[1] - '0');
 
     pieza = tab[vector_entrada[0]][vector_entrada[1]];
     res_1 = vector_salida[0] - vector_entrada[0];
     res_2 = vector_salida[1] - vector_entrada[1];
 
 
-
     switch (pieza)
     {
-    case ' ': printf("No hay pieza en esta casilla\n"); return 0; break;
+       
+
+    case ' ': printf("No hay pieza en esta casilla\n"); 
+        binario=0;
+        break;
     case 'p':
         if (vector_entrada[0] == 1 && res_1 == 2 && res_2 == 0)
         {
-            return 1;
+           binario=1;
         }
         else if (res_1 == 1 && res_2 == 0)
         {
-            return 1;
+            binario = 1;
         }
         else {
-            return 0;
+            binario = 0;
         }
         break;
     case 'c':
@@ -708,16 +713,16 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == 2 && res_2 == 1)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 1 && res_2 == 2)
         {
-            return 1;
+            binario = 1;
 
         }
         else {
 
-            return 0;
+            binario = 0;
         }
 
         break;
@@ -733,11 +738,11 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == res_2)
         {
-            return 1;
+            binario = 1;
         }
         else {
 
-            return 0;
+            binario = 0;
 
         } break;
 
@@ -746,12 +751,12 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
         if (res_1 == 0 || res_2 == 0)
         {
 
-            return 1;
+            binario = 1;
 
         }
         else {
 
-            return 0;
+            binario = 0;
 
         }
         break;
@@ -768,22 +773,22 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == 0 && res_2 == 1)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 1 && res_2 == 0)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 1 && res_2 == 1)
         {
 
-            return 1;
+            binario = 1;
         }
         else {
 
-            return  0;
+            binario = 0;
         }
-
+        break;
     case 'd':
         if (res_1 < 0)
         {
@@ -796,17 +801,17 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == res_2)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 0 || res_2 == 0)
         {
 
-            return 1;
+            binario = 1;
 
         }
         else {
 
-            return 0;
+            binario = 0;
 
         }
         break;
@@ -815,14 +820,14 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
     case 'P':
         if (vector_entrada[0] == 6 && res_1 == -2 && res_2 == 0)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == -1 && res_2 == 0)
         {
-            return 1;
+            binario = 1;
         }
         else {
-            return 0;
+            binario = 0;
         }
         break;
 
@@ -838,16 +843,16 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == 2 && res_2 == 1)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 1 && res_2 == 2)
         {
-            return 1;
+            binario = 1;
 
         }
         else {
 
-            return 0;
+            binario = 0;
         }
 
         break;
@@ -864,11 +869,11 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == res_2)
         {
-            return 1;
+            binario = 1;
         }
         else {
 
-            return 0;
+            binario = 0;
 
         } break;
     case 'T':
@@ -876,15 +881,15 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
         if (res_1 == 0 || res_2 == 0)
         {
 
-            return 1;
+            binario = 1;
 
         }
         else {
 
-            return 0;
+            binario = 0;
 
         }
-
+        break;
     case 'R':
         if (res_1 < 0)
         {
@@ -897,21 +902,21 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == 0 && res_2 == 1)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 1 && res_2 == 0)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 1 && res_2 == 1)
         {
-
-            return 1;
+            binario = 1;
         }
         else {
 
-            return  0;
+            binario = 0;
         }
+        break;
 
     case 'D':
         if (res_1 < 0)
@@ -925,35 +930,24 @@ int leer_jugada(char tab[8][8], char ent_mov[3], char sal_mov[3])
 
         if (res_1 == res_2)
         {
-            return 1;
+            binario = 1;
         }
         else if (res_1 == 0 || res_2 == 0)
         {
-            return 1;
+            binario = 1;
         }
         else {
 
-            return 0;
+            binario = 0;
         }
         break;
 
     }
+
+    return binario ;
 }
 
 
-
-int posicion_usuario(almacenar* u ,int n,char*codigo_de_busqueda)
-{
-    int i, posicion = 0;
-    for (i = 1; i < n && posicion == 0; i++)
-    {
-        if (strcmp(codigo_de_busqueda, u->codigo_busqueda_partida) == 0)
-        {
-            posicion = i;
-        }
-    }
-    return posicion;
-}
 
 int escribir_fichero(almacenar*lista,int n)
 {
@@ -973,10 +967,10 @@ int escribir_fichero(almacenar*lista,int n)
         
         for (i = 0; i < n; i++)
         {
-            fprintf(fichero, "%s", (lista + i)->jugadas_jugador1->ent_mov);    
-            fprintf(fichero, "%c", (lista + i)->jugadas_jugador1->pieza);
-            fprintf(fichero, "%s", (lista + i)->jugadas_jugador1->sal_mov);
-            fprintf(fichero, "%d\t", (lista + i)->jugadas_jugador1->tiempo_duracion);
+            fprintf(fichero, "%s", (lista)->jugadas_jugador1[i].ent_mov);    
+            fprintf(fichero, "%c", (lista)->jugadas_jugador1[i].pieza);
+            fprintf(fichero, "%s", (lista)->jugadas_jugador1[i].sal_mov);
+            fprintf(fichero, "%d\t", (lista )->jugadas_jugador1[i].tiempo_duracion);
             fprintf(fichero, "\n");
         }
 
@@ -987,10 +981,10 @@ int escribir_fichero(almacenar*lista,int n)
 
         for (j = 0; j < n; j++)
         {
-            fprintf(fichero, "%s",(lista + j)->jugadas_jugador2->ent_mov);
-            fprintf(fichero, "%c", (lista + j)->jugadas_jugador2->pieza);
-            fprintf(fichero, "%s", (lista + j)->jugadas_jugador2->sal_mov);
-            fprintf(fichero, "%d\t", (lista + j)->jugadas_jugador2->tiempo_duracion);
+            fprintf(fichero, "%s",(lista)->jugadas_jugador2[j].ent_mov);
+            fprintf(fichero, "%c", (lista)->jugadas_jugador2[j].pieza);
+            fprintf(fichero, "%s", (lista)->jugadas_jugador2[j].sal_mov);
+            fprintf(fichero, "%d\t", (lista)->jugadas_jugador2[j].tiempo_duracion);
 
             fprintf(fichero, "\n");
         }
@@ -1002,15 +996,6 @@ int escribir_fichero(almacenar*lista,int n)
         printf("Se ha producido un problema a la hora de grabar el fichero de usuarios\n");
     return err;
 }
-
-
-
-
-
-
-
-
-
 
 
 
